@@ -39,7 +39,6 @@ export default function App() {
           <Stack.Navigator initialRouteName="ProductList">
             <Stack.Screen name="Product" component={ProductScreen} />
             <Stack.Screen name="ProductList" component={ProductList} />
-
             <Stack.Screen name="ProductCart" component={ProductCart} />
           </Stack.Navigator>
         </Suspense>

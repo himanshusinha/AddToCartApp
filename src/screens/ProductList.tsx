@@ -22,7 +22,6 @@ const ProductList: FC = () => {
 
       setData(prev => [...prev, ...result]);
     } catch (error) {
-      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -66,14 +65,14 @@ const ProductList: FC = () => {
       <FlatList
         data={data}
         renderItem={renderItem}
-        keyExtractor={(item, index) => `${item.id}-${index}`}
+        keyExtractor={(item, index) => index.toString()}
         showsVerticalScrollIndicator={false}
         onEndReached={() => setPage(prev => prev + 1)}
         onEndReachedThreshold={0.5}
         initialNumToRender={5}
         maxToRenderPerBatch={5}
         windowSize={5}
-        removeClippedSubviews={true}
+        removeClippedSubviews
         ListFooterComponent={renderFooter}
       />
     </View>
