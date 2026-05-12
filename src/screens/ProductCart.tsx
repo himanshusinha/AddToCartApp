@@ -78,7 +78,7 @@ const ProductCart: FC = () => {
           <FlatList
             data={cartItems}
             renderItem={renderItem}
-            keyExtractor={(item, index) => String(index)}
+            keyExtractor={(item, index) => `${item.id}-${index}`}
             contentContainerStyle={styles.listContainer}
             showsVerticalScrollIndicator={false}
             // ===== PERFORMANCE =====

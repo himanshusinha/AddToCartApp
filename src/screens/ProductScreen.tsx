@@ -77,7 +77,7 @@ const ProductScreen: FC = () => {
       <FlatList
         showsVerticalScrollIndicator={false}
         data={product}
-        keyExtractor={(item, index) => String(index)}
+        keyExtractor={(item, index) => `${item.id}-${index}`}
         renderItem={({ item }) => {
           const isInCart = cartItems.some(
             (cartItem: any) => cartItem.id === item.id,

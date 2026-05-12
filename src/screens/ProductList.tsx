@@ -3,12 +3,17 @@ import { View, ActivityIndicator, FlatList } from 'react-native';
 import React, { FC, useCallback, useEffect, useState } from 'react';
 
 import Item from './Item';
+
 import { Product } from '../types/types';
 
 const ProductList: FC = () => {
   const [data, setData] = useState<Product[]>([]);
+
   const [loading, setLoading] = useState(true);
+
   const [page, setPage] = useState(1);
+
+  // ===== FETCH PRODUCTS =====
 
   const fetchProducts = async () => {
     try {
@@ -19,7 +24,6 @@ const ProductList: FC = () => {
       );
 
       const result = await response.json();
-
       setData(prev => [...prev, ...result]);
     } catch (error) {
     } finally {
@@ -27,15 +31,21 @@ const ProductList: FC = () => {
     }
   };
 
+  // ===== API CALL =====
+
   useEffect(() => {
     fetchProducts();
   }, [page]);
 
-  const renderItem = useCallback(({ item }: any) => {
-    return <Item item={item} />;
-  }, []);
+  // ===== RENDER ITEM =====
 
-  const renderFooter = () => {
+  const renderItem = useCallback(
+    ({ item }: { item: Product }) => <Item item={item} />,
+    [],
+  );
+  // ===== FOOTER =====
+
+  const renderFooter = useCallback(() => {
     if (!loading) return null;
 
     return (
@@ -43,9 +53,18 @@ const ProductList: FC = () => {
         <ActivityIndicator size="large" color="blue" />
       </View>
     );
-  };
+  }, [loading]);
 
-  // 🔥 Initial Loader
+  // ===== LOAD MORE =====
+
+  const handleLoadMore = useCallback(() => {
+    if (!loading) {
+      setPage(prev => prev + 1);
+    }
+  }, [loading]);
+
+  // ===== INITIAL LOADER =====
+
   if (loading && data.length === 0) {
     return (
       <View
@@ -65,9 +84,9 @@ const ProductList: FC = () => {
       <FlatList
         data={data}
         renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item, index) => `${item.id}-${index}`}
         showsVerticalScrollIndicator={false}
-        onEndReached={() => setPage(prev => prev + 1)}
+        onEndReached={handleLoadMore}
         onEndReachedThreshold={0.5}
         initialNumToRender={5}
         maxToRenderPerBatch={5}
